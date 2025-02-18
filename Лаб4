@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+
+// Перечисление предметов
+public enum Subject
+{
+    Math,
+    Physics,
+    Chemistry,
+    Biology,
+    History // Добавил еще один предмет для примера
+}
+
+// Структура оценки
+public struct Grade
+{
+    public Subject Subject;
+    public int Score;
+    public DateTime Date;
+}
+
+public class GradesPrototype
+{
+    private List<Grade> grades;
+
+    public GradesPrototype()
+    {
+        grades = new List<Grade>();
+    }
+
+    // Добавление оценки
+    public void AddGrade(Grade grade)
+    {
+        grades.Add(grade);
+    }
+
+    // Удаление оценки по индексу (не очень удобно, лучше удалять по предмету и дате)
+    public void RemoveGrade(int index)
+    {
+        if (index >= 0 && index < grades.Count)
+        {
+            grades.RemoveAt(index);
+        }
+        else
+        {
+            Console.WriteLine("Неверный индекс.");
+        }
+    }
+
+
+    // Удаление оценки по предмету и дате (более удобный вариант)
+    public bool RemoveGrade(Subject subject, DateTime date)
+    {
+        return grades.RemoveAll(g => g.Subject == subject && g.Date == date) > 0;
+    }
+
+
+    // Поиск оценок по предмету
+    public List<Grade> FindGradesBySubject(Subject subject)
+    {
+        return grades.FindAll(grade => grade.Subject == subject);
+    }
+
+    // Вывод всех оценок
+    public void PrintAllGrades()
+    {
+        if (grades.Count == 0)
+        {
+            Console.WriteLine("Список оценок пуст.");
+            return;
+        }
+
+        Console.WriteLine("Список оценок:");
+        foreach (Grade grade in grades)
+        {
+            Console.WriteLine($"Предмет: {grade.Subject}, Оценка: {grade.Score}, Дата: {grade.Date.ToShortDateString()}");
+        }
+    }
+
+
+    public static void Main(string[] args)
+    {
+        GradesPrototype gp = new GradesPrototype();
+
+        // Добавление оценок
+        gp.AddGrade(new Grade { Subject = Subject.Math, Score = 90, Date = new DateTime(2024, 3, 10) });
+        gp.AddGrade(new Grade { Subject = Subject.Physics, Score = 85, Date = new DateTime(2024, 3, 15) });
+        gp.AddGrade(new Grade { Subject = Subject.Math, Score = 95, Date = new DateTime(2024, 3, 20) });
+        gp.AddGrade(new Grade { Subject = Subject.History, Score = 78, Date = new DateTime(2024, 3, 25) });
+
+
+        // Вывод всех оценок
+        gp.PrintAllGrades();
+
+        // Поиск оценок по предмету
+        Console.WriteLine("\nОценки по математике:");
+        List<Grade> mathGrades = gp.FindGradesBySubject(Subject.Math);
+        foreach (Grade grade in mathGrades)
+        {
+            Console.WriteLine($"Предмет: {grade.Subject}, Оценка: {grade.Score}, Дата: {grade.Date.ToShortDateString()}");
+        }
+
+
+        // Удаление оценки по предмету и дате
+        bool removed = gp.RemoveGrade(Subject.Math, new DateTime(2024, 3, 10));
+        Console.WriteLine($"\nОценка удалена: {removed}");
+
+        gp.PrintAllGrades();
+    }
+}
