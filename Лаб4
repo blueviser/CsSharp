@@ -8,10 +8,8 @@ public enum Subject
     Physics,
     Chemistry,
     Biology,
-    History // Добавил еще один предмет для примера
-}
+    History 
 
-// Структура оценки
 public struct Grade
 {
     public Subject Subject;
@@ -28,13 +26,12 @@ public class GradesPrototype
         grades = new List<Grade>();
     }
 
-    // Добавление оценки
     public void AddGrade(Grade grade)
     {
         grades.Add(grade);
     }
 
-    // Удаление оценки по индексу (не очень удобно, лучше удалять по предмету и дате)
+    // Удаление оценки по индексу 
     public void RemoveGrade(int index)
     {
         if (index >= 0 && index < grades.Count)
@@ -48,7 +45,7 @@ public class GradesPrototype
     }
 
 
-    // Удаление оценки по предмету и дате (более удобный вариант)
+    // Удаление оценки по предмету и дате 
     public bool RemoveGrade(Subject subject, DateTime date)
     {
         return grades.RemoveAll(g => g.Subject == subject && g.Date == date) > 0;
